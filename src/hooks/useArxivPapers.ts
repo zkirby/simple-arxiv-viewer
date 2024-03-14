@@ -1,18 +1,28 @@
-import { useEffect } from "react";
-const ARXIV_API_URL = "http://export.arxiv.org/api/query";
+import { useEffect, useState } from "react";
 
-export default async function useArxivPapers() {
-  useEffect(() => {
-    const params = new URLSearchParams({
-      search_query: "cat:cs.HC",
-      max_results: "100",
-      sortBy: "lastUpdatedDate",
-      sortOrder: "descending",
+export default function useArxivPapers() {
+  const [papers, setPapers] = useState([]);
+  interface Paper {
+    pubDate: string;
+    [key: string]: any;
+  }
+
+  const fetchPapers = async () => {
+    const res = await fetch("http://localhost:3000/api/paper/list", {
+      method: "POST",
     });
-    fetch(`${ARXIV_API_URL}?${params}`);
+    const data = await res.json();
+    setPapers(
+      data.items.sort(
+        (a: Paper, b: Paper) =>
+          new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
+      )
+    );
+  };
 
-    // console.log(await response.json());
+  useEffect(() => {
+    fetchPapers();
   }, []);
 
-  return [];
+  return papers as any[];
 }

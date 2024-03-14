@@ -1,5 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import useArxivPapers from "./hooks/useArxivPapers";
+
+const categoryColors: { [key: string]: string } = {
+  "Human-Computer Interaction": "bg-pastel-green-200",
+  "Artificial Intelligence": "bg-pastel-blue-200",
+  "Computers and Society": "bg-pastel-pink-200",
+  "General Literature": "bg-pastel-orange-200",
+  Multimedia: "bg-pastel-purple-200",
+  "Software Engineering": "bg-pastel-red-200",
+  All: "bg-pastel-yellow-200",
+};
 
 function App() {
   const allPapers = useArxivPapers();
@@ -9,6 +19,11 @@ function App() {
     const saved = localStorage.getItem("viewedPapers");
     return saved ? JSON.parse(saved) : [];
   });
+
+  const categories = useMemo(
+    () => Array.from(new Set(allPapers.flatMap((paper) => paper.categories))),
+    [allPapers]
+  );
 
   // Update local storage when viewedPapers changes
   useEffect(() => {
@@ -21,41 +36,43 @@ function App() {
     }
   };
 
-  const filteredPapers =
-    filter === "All"
-      ? allPapers.filter((paper) => !viewedPapers.includes(paper.id))
-      : allPapers.filter(
-          (paper) =>
-            paper.category === filter && !viewedPapers.includes(paper.id)
-        );
+  const filteredPapers = useMemo(() => {
+    const filtered =
+      filter === "All"
+        ? allPapers.filter((paper) => !viewedPapers.includes(paper.id))
+        : allPapers.filter(
+            (paper) =>
+              paper.categories.includes(filter) &&
+              !viewedPapers.includes(paper.id)
+          );
 
-  const categories = Array.from(
-    new Set(allPapers.map((paper) => paper.category))
-  );
-
-  const categoryColors: { [key: string]: string } = {
-    "Human-Computer Interaction": "bg-pastel-green-200",
-    "Artificial Intelligence": "bg-pastel-blue-200",
-    "Computers and Society": "bg-pastel-pink-200",
-    All: "bg-pastel-yellow-200",
-  };
+    console.log(filtered.length, allPapers.length, viewedPapers.length);
+    return filtered;
+  }, [filter, allPapers, viewedPapers]);
 
   return (
     <div className="bg-gray-100 min-h-screen p-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">ArXiv Papers</h1>
-      <div className="mb-6">
-        <select
-          className="p-2 rounded border-gray-300"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option value="All">All Categories</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <select
+            className="p-2 rounded border-gray-300"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          >
+            <option value="All">All Categories</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <span className="text-gray-700">
+            {filteredPapers.length} Papers Showing
+          </span>
+        </div>
       </div>
       <div className="space-y-8">
         {filteredPapers.map((paper) => (
@@ -97,13 +114,16 @@ function App() {
               <span className="text-sm text-gray-600 float-right">
                 {new Date(paper.pubDate).toLocaleDateString()}
               </span>
-              <div
-                className={`text-sm font-medium rounded-full text-gray-800 px-3 py-1 ml-2 inline-block ${
-                  categoryColors[paper.category] || categoryColors["All"]
-                }`}
-              >
-                {paper.category}
-              </div>
+              {paper.categories.map((category) => (
+                <div
+                  key={category}
+                  className={`text-sm font-medium rounded-full text-gray-800 px-3 py-1 ml-2 inline-block ${
+                    categoryColors[category] || categoryColors["All"]
+                  }`}
+                >
+                  {category}
+                </div>
+              ))}
             </div>
           </div>
         ))}

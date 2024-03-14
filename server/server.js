@@ -17,11 +17,27 @@ const paperTypes = [
     filter: "cs.CY",
     name: "Computers and Society",
   },
+  // {
+  //   filter: "cs.ET",
+  //   name: "Emerging Technologies",
+  // },
+  {
+    filter: "cs.GL",
+    name: "General Literature",
+  },
+  {
+    filter: "cs.MM",
+    name: "Multimedia",
+  },
+  {
+    filter: "cs.SE",
+    name: "Software Engineering",
+  },
 ];
 
 app.post("/api/paper/list", async (req, res) => {
   try {
-    const items = [];
+    const paperMap = new Map();
     for (const paperType of paperTypes) {
       const feed = await feedparser.parseURL(
         "http://export.arxiv.org/api/query?" +
@@ -32,31 +48,31 @@ app.post("/api/paper/list", async (req, res) => {
             sortOrder: "descending",
           })
       );
+      const threeDaysAgo = new Date();
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
       feed.items.forEach((item) => {
-        item.category = paperType.name;
+        const pubDate = new Date(item.pubDate);
+        if (pubDate > threeDaysAgo) {
+          if (!paperMap.has(item.id)) {
+            item.categories = [paperType.name];
+            paperMap.set(item.id, item);
+          } else {
+            const existingItem = paperMap.get(item.id);
+            if (!existingItem.categories.includes(paperType.name)) {
+              existingItem.categories.push(paperType.name);
+            }
+          }
+        }
       });
-      items.push(...feed.items);
     }
 
+    const items = Array.from(paperMap.values());
     res.send({ items });
   } catch (error) {
     console.error("Error fetching paper:", error);
     res.status(500).send("Error fetching paper");
   }
 });
-
-// app.get("/api/paper/:paperLink", async (req, res) => {
-//   const { paperLink } = req.params;
-
-//   try {
-//     const response = await axios.get(`https://arxiv.org/abs/${paperLink}`);
-//     const paperContent = response.data;
-//     res.send(paperContent);
-//   } catch (error) {
-//     console.error("Error fetching paper:", error);
-//     res.status(500).send("Error fetching paper");
-//   }
-// });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

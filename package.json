@@ -1,6 +1,0 @@
-{
-	"dependencies": {
-		"react-xml-parser": "^1.1.8",
-		"react-xml-viewer": "^2.0.1"
-	}
-}

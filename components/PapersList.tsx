@@ -7,6 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/Card";
+import Link from "next/link";
+import { ARXIV_ABS_URL_PREFIX } from "../app/constants";
 
 const feedparser = new Parser();
 
@@ -26,9 +28,20 @@ async function getPapers() {
   const twoDaysAgo = new Date();
   twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
 
-  return feed.items.filter((i) => {
-    return new Date(i.pubDate!) > twoDaysAgo;
-  });
+  return feed.items
+    .filter((i) => {
+      if (!i.pubDate) return false;
+      return new Date(i.pubDate) > twoDaysAgo;
+    })
+    .map((i) => {
+      return {
+        id: i.id.split(ARXIV_ABS_URL_PREFIX)[1],
+        pubDate: i.pubDate!, // undefined are filtered out above
+        title: i.title,
+        author: i.author,
+        summary: i.summary,
+      };
+    });
 }
 export default async function PapersList() {
   const papers = await getPapers();
@@ -37,20 +50,22 @@ export default async function PapersList() {
     <>
       {papers.map((p) => {
         return (
-          <Card key={p.id} className="mb-5">
-            <CardHeader>
-              <CardTitle>{p.title}</CardTitle>
-              <CardDescription>
-                <span className="mr-3">
-                  {new Date(p.pubDate!).toLocaleDateString()}
-                </span>
-                <span>By {p.author}</span>
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>{p.summary}</p>
-            </CardContent>
-          </Card>
+          <Link href={`/paper/${p.id}`}>
+            <Card key={p.id} className="mb-5">
+              <CardHeader>
+                <CardTitle>{p.title}</CardTitle>
+                <CardDescription>
+                  <span className="mr-3">
+                    {new Date(p.pubDate).toLocaleDateString()}
+                  </span>
+                  <span>By {p.author}</span>
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p>{p.summary}</p>
+              </CardContent>
+            </Card>
+          </Link>
         );
       })}
     </>

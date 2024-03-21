@@ -1,0 +1,61 @@
+/* 
+* Although flakier, tt's significantly easier to style 
+* the paper using the existing Arxiv CSS classes rather than
+* trying to override them with custom classes or inline tailwind styles.
+*/
+/* General styles */
+.ltx_para,
+.ltx_p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+  color: #333;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Headings */
+.ltx_subsection,
+.ltx_title,
+.ltx_section {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  color: #222;
+  margin-top: 2rem;
+}
+
+.ltx_subsection {
+  font-size: 1.2rem;
+}
+
+.ltx_title {
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.ltx_section {
+  font-size: 2rem;
+  margin-top: 3rem;
+}
+
+/* Lists */
+.ltx_itemize {
+  list-style-type: none;
+  padding-left: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.ltx_item {
+  position: relative;
+  margin-bottom: 0.8rem;
+}
+
+.ltx_item::before {
+  content: "";
+  position: absolute;
+  left: -1.2rem;
+  top: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #007bff;
+  border-radius: 50%;
+}

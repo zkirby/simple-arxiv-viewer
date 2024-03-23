@@ -1,15 +1,17 @@
 import { ARXIV_HTML_URL_PREFIX } from "@/app/constants";
 import Paper from "@/lib/paper";
+import AI from "@/lib/ai";
 
 import "./paper.style.css";
+
+const ai = new AI("gpt-3.5-turbo");
 
 async function getPaper(id: string) {
   const response = await fetch(`${ARXIV_HTML_URL_PREFIX}${id}`);
   const responseText = await response.text();
 
   const paper = new Paper(id, responseText);
-
-  // run it through AI transformation
+  // await paper.transform(ai.simplify.bind(ai));
 
   return paper;
 }

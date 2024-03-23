@@ -1,5 +1,4 @@
 "use server";
-import Parser from "rss-parser";
 import {
   Card,
   CardContent,
@@ -8,50 +7,19 @@ import {
   CardTitle,
 } from "@/components/ui/Card";
 import Link from "next/link";
-import { ARXIV_ABS_URL_PREFIX } from "../app/constants";
+import { PaperSummary } from "../app/types";
 
-const feedparser = new Parser();
-
-async function getPapers() {
-  const feed = await feedparser.parseURL(
-    "http://export.arxiv.org/api/query?" +
-      new URLSearchParams({
-        search_query: `cat:cs.AI`,
-        sortBy: "lastUpdatedDate",
-        sortOrder: "descending",
-        max_results: "10",
-      })
-  );
-
-  // TODO: Placeholder until a better cutoff date is decided on.
-  // The goal for now is to not make the 'Daily Dose' overwhelming.
-  const twoDaysAgo = new Date();
-  twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-
-  return feed.items
-    .filter((i) => {
-      if (!i.pubDate) return false;
-      return new Date(i.pubDate) > twoDaysAgo;
-    })
-    .map((i) => {
-      return {
-        id: i.id.split(ARXIV_ABS_URL_PREFIX)[1],
-        pubDate: i.pubDate!, // undefined are filtered out above
-        title: i.title,
-        author: i.author,
-        summary: i.summary,
-      };
-    });
-}
-export default async function PapersList() {
-  const papers = await getPapers();
-
+export default async function PapersList({
+  papers,
+}: {
+  papers: PaperSummary[];
+}) {
   return (
     <>
       {papers.map((p) => {
         return (
           <Link href={`/paper/${p.id}`}>
-            <Card key={p.id} className="mb-5">
+            <Card key={p.id} className="mb-5 hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle>{p.title}</CardTitle>
                 <CardDescription>

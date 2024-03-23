@@ -24,7 +24,11 @@ export default class Paper {
   }
 
   toString() {
-    return this._paper.html();
+    return this._paper.html() ?? "";
+  }
+
+  async transform(cb: (paperString: HtmlString) => Promise<HtmlString>) {
+    this._paper.html(await cb(this.toString()));
   }
 
   /**

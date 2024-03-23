@@ -13,22 +13,24 @@
   font-family: "Roboto", sans-serif;
 }
 
-/* Headings */
-.ltx_subsection,
-.ltx_title,
-.ltx_section {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
-  color: #222;
-  margin-top: 2rem;
+.ltx_flex_figure {
+  display: flex;
+  align-items: center;
 }
 
+.ltx_align_center {
+  justify-content: center;
+}
+
+/* Headings */
 .ltx_subsection {
   font-size: 1.2rem;
 }
 
 .ltx_title {
+  margin-top: 2rem;
   font-size: 1.5rem;
+  font-weight: 700;
   margin-bottom: 1.2rem;
 }
 
@@ -39,23 +41,94 @@
 
 /* Lists */
 .ltx_itemize {
-  list-style-type: none;
-  padding-left: 1.5rem;
+  padding-left: 1rem;
   margin-bottom: 1.2rem;
 }
 
 .ltx_item {
-  position: relative;
-  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.ltx_item::before {
-  content: "";
-  position: absolute;
-  left: -1.2rem;
-  top: 0.5rem;
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: #007bff;
-  border-radius: 50%;
+.ltx_tag.ltx_tag_item {
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+
+.ltx_item .ltx_p,
+.ltx_item .ltx_para {
+  margin-bottom: 0;
+}
+
+/* Heading */
+#target-section {
+  display: flex;
+  color: lightgray;
+}
+
+#watermark-tr {
+  margin-left: 1rem;
+}
+
+/* Authors Section */
+.ltx_personname {
+  font-weight: bold;
+}
+
+.ltx_creator.ltx_role_author {
+  margin-bottom: 0.4rem;
+}
+
+.ltx_authors {
+  display: flex;
+  flex-direction: column;
+}
+
+.ltx_author_before {
+  display: none;
+}
+
+.ltx_dates {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.ltx_dates::before {
+  content: "Published: ";
+}
+
+/* Abstract */
+.ltx_note,
+.ltx_keywords {
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.ltx_keywords {
+  margin-bottom: 0.4rem;
+}
+
+.ltx_keywords::before {
+  content: "Keywords: ";
+  font-weight: bold;
+}
+
+.ltx_note {
+  margin-right: 0.5rem;
+}
+
+/* Images */
+.ltx_caption {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ltx_figure {
+  margin-bottom: 1.2rem;
 }

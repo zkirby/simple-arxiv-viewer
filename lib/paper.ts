@@ -45,11 +45,18 @@ export default class Paper {
   }
 
   /**
-   * Turn the citations into tooltips
+   * Condense the meta data about the author into a popover
+   *
+   * TODO: implement
    */
-  private addCitationTooltips() {
-    // TODO: Implement this
-  }
+  private condenseAuthorMeta() {}
+
+  /**
+   * Turn the citations into tooltips
+   *
+   * TODO: implement
+   */
+  private addCitationTooltips() {}
 
   /**
    * Hide the bibliography section of the paper. We'll make this

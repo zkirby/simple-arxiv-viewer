@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div align="center" style="margin-bottom: 1rem">
+    <img height="200" src="assets/brain.webp" />
+</div>
 
-## Getting Started
+<h1 align="center">
+SAV (Simple Arxiv Viewer)
+</h1>
 
-First, run the development server:
+<div align="center" style="margin-bottom: 6rem">
+<i>Democratizing Access To Scientific Research... or maybe just making it easier to read and skim technical papers</i>
+</div>
+
+## About
+
+SAV was born out my frustration with reading technical papers, primarily:
+
+1. The overly verbose diction and grammar choices.
+2. Frequent unnecessary embellishments and author commentary.
+3. The poor reading experience of most PDF viewers.
+4. The difficulty of groking the main point of the paper.
+
+SAV is my attempt to improve the reading experience of technical papers, starting with arXiv. To do this, SAV takes advantage utilizes:
+
+1. LLMs to re-write, re-fine, and simplify (without loss of meaning) the paper content.
+2. arXiv's (beta) HTML export feature which improves accessibility and allows for a completely redesigned reading experience.
+
+## How it Works
+
+SAV is fairly simplistic right now and is composed of two main pages:
+
+- Papers List: a simple overview of the last three days of AI/ML papers
+  ![List view](/assets/list.png)
+- Paper Viewer: a better paper reading experience
+  ![paper viewer](/assets/viewer.png)
+
+## Setup
+
+This repo is <span style="color: yellow">**very much a work in progress**</span> and should really be viewed more as a proof of concept for now. In particular, it only supports papers that themselves support the arXiv HTML export functionality. Anecdotally, not many papers supports this functionality yet, however, arXiv is actively improving their paper coverage. Additionally, the current AI transformations taking place are done on the fly and are relatively simplistic.
+
+With that said, if you're still interested in trying it out, the setup is trivial thanks to Nextjs
+
+### Step 1
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm i
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Step 2
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+set `OPENAI_API_KEY` in `.env.local`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Step 3
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+pnpm dev
+```

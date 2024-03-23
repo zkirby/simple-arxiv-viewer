@@ -11,7 +11,7 @@ async function getPaper(id: string) {
   const responseText = await response.text();
 
   const paper = new Paper(id, responseText);
-  // await paper.transform(ai.simplify.bind(ai));
+  await paper.transform(ai.simplify.bind(ai));
 
   return paper;
 }

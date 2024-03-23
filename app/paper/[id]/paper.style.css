@@ -73,7 +73,7 @@
 
 /* Authors Section */
 .ltx_personname {
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .ltx_creator.ltx_role_author {
@@ -130,5 +130,38 @@
 }
 
 .ltx_figure {
+  margin-bottom: 1.2rem;
+}
+
+/* Citations */
+.ltx_citation_text {
+  position: relative;
+  border-bottom: 1px dotted black;
+}
+
+.ltx_tooltip {
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  display: block;
+  text-align: left;
+  font-style: normal;
+  border-radius: 8px;
+  padding: 8px;
+  position: absolute;
+  z-index: 999;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ltx_citation_text:hover .ltx_tooltip {
+  visibility: visible;
+}
+
+/* Biblio */
+.ltx_bibitem {
   margin-bottom: 1.2rem;
 }

@@ -20,7 +20,7 @@ export default class Paper {
     this._biblio = this.$(ARXIV_HTML_BIBLIO_SELECTOR);
 
     this.changeImageRelativeImports();
-    this.hideBibliography();
+    this.addCitationTooltips();
   }
 
   toString() {
@@ -56,13 +56,29 @@ export default class Paper {
    *
    * TODO: implement
    */
-  private addCitationTooltips() {}
+  private addCitationTooltips() {
+    this._paper.find("cite").each((_, el) => {
+      const $cite = this.$(el);
+      const $link = this.$($cite).find("a");
+
+      const bibId = $link.attr("href")?.split("#")[1];
+      if (!bibId) {
+        console.error("No bibId found for citation", $cite.html());
+        return;
+      }
+      const bibEl = this.$(`#${bibId.replace(".", "\\.")}`);
+
+      $cite.html(
+        `<span class="ltx_citation_text">${$cite.text()}<span class="ltx_tooltip">${bibEl.text()}</span></span>`
+      );
+    });
+  }
 
   /**
    * Hide the bibliography section of the paper. We'll make this
    * a setting in the future.
+   *
+   * TODO: implement
    */
-  private hideBibliography() {
-    this._biblio.attr("style", "display: none;");
-  }
+  private removeBibliography() {}
 }
